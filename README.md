@@ -1,11 +1,10 @@
-A XML Signature (XMLDSig) is a syntax to provide digital signatures of an XML file. Support for these signatures is provided by, for instance, the [libxmlsec C library](http://www.aleksey.com/xmlsec/). A Python wrapper for this library is available as [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=home). However, this wrapper only provides access to the low-level API functions and does not achieve a Pythonic API.
+XML Signatures (XMLDSig) provide digital signatures of an XML file. Support for these signatures is provided by, for instance, the [libxmlsec C library](http://www.aleksey.com/xmlsec/). A Python wrapper for this library is available as [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=home). However, this wrapper only provides access to the low-level API functions and does not achieve a Pythonic API.
 
-This xmldsig module is a convenience wrapper for pyXMLSec. It has been built initially to be used for signing and validating messages from the Dutch iDEAL payment processing system, but has been extended for general use. The module is inspired by [the code examples of pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples) and [the module made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his module lacks the ability to specify the key format, which is required to load certificates as named keys. This module has been made to mimic large parts of Lagadec's API to ensure an easy transition.
-
+This xmldsig module is a convenience wrapper for pyXMLSec. It has been built initially to be used for signing and validating messages from the Dutch iDEAL payment processing system, but has been extended for general use. The module is inspired by [the code examples of pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples) and [the module made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his module lacks the ability to specify the key format, which is required to load certificates as named keys. This module mimics large parts of Lagadec's API to ensure easy transition.
 
 Installation
 ============
-To use this library, you need to have installed two modules:
+To use this library, you need to have installed two Python modules:
 
 * [python-libxml2](http://xmlsoft.org/python.html)
 * [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/)
