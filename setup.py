@@ -7,7 +7,7 @@ from setuptools import setup
 #    required = f.read().splitlines()
 
 setup(name='xmldsig',
-      version='0.2',
+      version='0.2.1',
       author='Ralph Broenink',
       author_email='jrbroenink@antagonist.nl',
       license='BSD',

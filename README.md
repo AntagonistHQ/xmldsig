@@ -107,3 +107,10 @@ True
 Similarly, you can sign using the class. The key to be used can be specified by providing the correct KeyName attribute, or by providing the key name in the XML file you supply to the signer. Otherwise, the first in-memory key is used.
 
 Note that the full xmlsec library is not utilized and only limited signing and verification are possible. Encryption/decryption has not been implemented.
+
+
+Changelog
+=========
+* **0.2.1, 2013-06-19** Fixed issue where the crypto app was not loaded and where xmldsig.sign() would not work properly
+* **0.2, 2013-05-08** Added ability to generate templates
+* **0.1, 2013-03-17** Initial version

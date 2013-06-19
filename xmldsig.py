@@ -78,8 +78,8 @@ neither has template support.
 
 __author__ = "Ralph Broenink"
 __copyright__ = "Copyright 2013. Antagonist B.V."
-__version__ = "0.2"
-__date__ = "2013-05-08"
+__version__ = "0.2.1"
+__date__ = "2013-06-19"
 
 # For those feeling more comfortable using constants
 
@@ -128,7 +128,7 @@ def sign(body, key_path, key_pass=None, key_name=None, key_format='pem', *args, 
     
     xmldsig = XMLDSIG()
     xmldsig.load_key(key_path, key_pass, key_name, key_format=key_format)
-    if key_name:
+    if key_name and (args or kwargs):
         kwargs['key_name'] = key_name
     return xmldsig.sign(body, *args, **kwargs)
 
@@ -611,9 +611,8 @@ def _init():
     # Initialize xmlsec
     if xmlsec.init() < 0:
         raise XMLDSIGError("Failed initializing xmlsec library")
-    # Does not seem to be necessary to init cryptoApp
-    #if xmlsec.cryptoAppInit(None) < 0:
-    #    raise IDealSigningError("Failed initializing crypto library")
+    if xmlsec.cryptoAppInit(None) < 0:
+        raise IDealSigningError("Failed initializing crypto library")
     if xmlsec.cryptoInit() < 0:
         raise XMLDSIGError("Failed initializing xmlsec-crypto library")
     
