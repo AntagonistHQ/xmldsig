@@ -1,29 +1,23 @@
-A XML Signature (XMLDSig) is a syntax to provide digital signatures of an XML file. These can be contained within that XML file itself (enveloped). 
+A XML Signature (XMLDSig) is a syntax to provide digital signatures of an XML file. Support for these signatures is provided by, for instance, the [libxmlsec C library](http://www.aleksey.com/xmlsec/). A Python wrapper for this library is available as [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=home). However, this wrapper only provides access to the low-level API functions and does not achieve a Pythonic API.
 
-In Python, the pyXMLSec library is a wrapper for the libxmlsec C-library. The wrapper is built closely to the low-level API and this means that the module has lots of calls the developer generally should not care about.
-
-The xmldsig library is a convenience wrapper for the pyXMLSec library. It has been built initially to be used for the Dutch iDEAL payment processing system, but has been extended for use by other parties.
-
-The library is inspired by the code examples of the pyXMLSec library and [the library made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his library lacks the ability to specify the key format, which is required to load certificates as keys with names and has been the main reason for the development of this module.
+This xmldsig module is a convenience wrapper for pyXMLSec. It has been built initially to be used for signing and validating messages from the Dutch iDEAL payment processing system, but has been extended for general use. The module is inspired by [the code examples of pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples) and [the module made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his module lacks the ability to specify the key format, which is required to load certificates as named keys. This module has been made to mimic large parts of Lagadec's API to ensure an easy transition.
 
 
 Installation
 ============
-To use this library, you need to have installed two libraries:
+To use this library, you need to have installed two modules:
 
 * [python-libxml2](http://xmlsoft.org/python.html)
 * [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/)
 
-The first requires you to install libxml2 and libxslt, the latter requires the libxmlsec library (we had to tell our OS to install libxml2-devel, libxslt-devel, xmlsec1-devel, xmlsec1-openssl-devel, and libtool-ltdl-devel).
+The first requires you to install libxml2 and libxslt, the latter requires the libxmlsec library. In fact, we had to tell our OS to install libxml2-devel, libxslt-devel, xmlsec1-devel, xmlsec1-openssl-devel, and libtool-ltdl-devel.
 
-Some notes to these packages:
+Some notes to the availability of these packages in PyPI:
 
 * The python-libxml2 library does not provide a proper download link in PyPI and a direct download link is provided in requirements.txt. 
 * The pyxmlsec library does not build properly on x64 systems, which is why pyxmlsec-next is included in requirements.txt. This is the pyxmlsec library, built from [the Github repository of pyxmlsec](https://github.com/dnet/pyxmlsec). Not using pyxmlsec-next would result in failing verification on these systems.
 
-After you have successfully downloaded and installed the required libraries, you should be able to run `python setup.py install` without any problems.
-
-You should run the tests by executing `python setup.py test` to verify installation went according to plan.
+After you have successfully downloaded and installed the required libraries, you should be able to run `python setup.py install` without any problems. Please run `python setup.py test` to verify the installation.
 
 
 Basic usage
@@ -31,15 +25,13 @@ Basic usage
 
 Keys
 ----
-Generally, you would want to generate a keypair to work and test with. You can create a keys and certificates using the OpenSSL application as follows:
+Generally, you would want to generate a keypair to work and test with. You can create keys and certificates yourself using OpenSSL. The example keys and certificates included have been created as follows:
 
 ```bash
 openssl genrsa -aes128 -passout pass:foobar -out test.pem 2048                     # private key
 openssl rsa -in test.pem -passin pass:foobar -pubout -out test.pub                 # public key
 openssl req -x509 -new -key test.pem -passin pass:foobar -days 3650 -out test.cer  # self-signed x509 certificate
 ```
-
-Note that there are onelines that do the same. Some example certificates are included in the package.
 
 
 Signing
@@ -108,8 +100,9 @@ True
 
 Similarly, you can sign using the class. The key to be used can be specified by providing the correct KeyName attribute, or by providing the key name in the XML file you supply to the signer. Otherwise, the first in-memory key is used.
 
-Note that the full xmlsec library is not utilized and only limited signing and verification are possible. Encryption/decryption has not been implemented.
-
+Todo
+====
+* Extend functionality to include other parts of the pyXMLSec library, including encryption/decryption
 
 Changelog
 =========
