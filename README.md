@@ -4,7 +4,7 @@ In Python, the pyXMLSec library is a wrapper for the libxmlsec C-library. The wr
 
 The xmldsig library is a convenience wrapper for the pyXMLSec library. It has been built initially to be used for the Dutch iDEAL payment processing system, but has been extended for use by other parties.
 
-The library is inspired by the code examples of the pyXMLSec library and the library made by Philippe Lagadec (http://www.decalage.info/python/pyxmldsig). However, his library lacks the ability to specify the key format, which is required to load certificates as keys with names.
+The library is inspired by the code examples of the pyXMLSec library and [the library made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his library lacks the ability to specify the key format, which is required to load certificates as keys with names.
 
 Installation
 ============
@@ -22,12 +22,30 @@ Some notes to these packages:
 
 After you have successfully downloaded and installed the required libraries, you should be able to run `python setup.py install` without any problems.
 
+You should run the tests included in the library to ensure the installation succeeded. (But there aren't any yet...)
+
 Basic usage
 ===========
+
+Keys
+----
+Generally, you would want to generate a keypair to work and test with. You can create a keys and certificates using the OpenSSL application as follows:
+
+```bash
+openssl genrsa -aes128 -passout pass:foobar -out test.pem 2048                     # private key
+openssl rsa -in test.pem -passin pass:foobar -pubout -out test.pub                 # public key
+openssl req -x509 -new -key test.pem -passin pass:foobar -days 3650 -out test.cer  # self-signed x509 certificate
+```
+
+Note that there are onelines that do the same. Some example certificates are included in the package.
+
+
+Signing
+-------
 Assuming you pass the XML as a string containing the XMLDsig template, you can sign a file as follows (this example is similar to [the first example of the pyXMLSec library](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples&id=1)):
 
 ```python
->>> xml=\"\"\"<?xml version="1.0" encoding="UTF-8"?>
+>>> xml="""<?xml version="1.0" encoding="UTF-8"?>
 ... <Envelope xmlns="urn:envelope">
 ...   <Data>
 ...     Hello, World!
@@ -49,7 +67,7 @@ Assuming you pass the XML as a string containing the XMLDsig template, you can s
 ...     <KeyName/>
 ...     </KeyInfo>
 ...   </Signature>
-... </Envelope>\"\"\"
+... </Envelope>"""
 >>> xmldsig.sign(xml, 'keyfile.key', 'password', 'name')
 (...)
 ```
@@ -63,8 +81,11 @@ If you do not wish to provide a template yourself, you could let the module gene
 ...              references={'sha256': ('enveloped-signature', )})
 (...)
 ```
-                      
-There are simple methods to check verification of the 
+
+Verification
+------------
+
+There are simple methods to verify a signature:
 
 ```python
 >>> xmldsig.verify(xml, 'keyfile.key', 'password', 'name')
