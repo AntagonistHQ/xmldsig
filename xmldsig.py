@@ -622,9 +622,8 @@ def destroy():
     """Destroys the modules loaded by this module. Should be called after
     everything is done, but we won't kill you if you don't.
     """
-    # The following commands are commented because the first is not needed
-    # (we do not load it anyway) and the second is bugged with urllib2
-    # (see https://github.com/dnet/pyxmlsec/issues/1)
+    # The following commands are commented because this is bugged with
+    # urllib2 (see https://github.com/dnet/pyxmlsec/issues/1)
     #xmlsec.cryptoShutdown()
     #xmlsec.cryptoAppShutdown()
         

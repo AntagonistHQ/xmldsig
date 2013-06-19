@@ -4,7 +4,8 @@ In Python, the pyXMLSec library is a wrapper for the libxmlsec C-library. The wr
 
 The xmldsig library is a convenience wrapper for the pyXMLSec library. It has been built initially to be used for the Dutch iDEAL payment processing system, but has been extended for use by other parties.
 
-The library is inspired by the code examples of the pyXMLSec library and [the library made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his library lacks the ability to specify the key format, which is required to load certificates as keys with names.
+The library is inspired by the code examples of the pyXMLSec library and [the library made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his library lacks the ability to specify the key format, which is required to load certificates as keys with names and has been the main reason for the development of this module.
+
 
 Installation
 ============
@@ -13,7 +14,7 @@ To use this library, you need to have installed two libraries:
 * [python-libxml2](http://xmlsoft.org/python.html)
 * [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/)
 
-The first requires you to install libxml2 and libxslt, the latte requires the libxmlsec library (note that we had to tell our OS to install xmlsec1-devel, xmlsec1-openssl-devel, and libtool-ltdl-devel).
+The first requires you to install libxml2 and libxslt, the latter requires the libxmlsec library (we had to tell our OS to install libxml2-devel, libxslt-devel, xmlsec1-devel, xmlsec1-openssl-devel, and libtool-ltdl-devel).
 
 Some notes to these packages:
 
@@ -22,7 +23,8 @@ Some notes to these packages:
 
 After you have successfully downloaded and installed the required libraries, you should be able to run `python setup.py install` without any problems.
 
-You should run the tests included in the library to ensure the installation succeeded. (But there aren't any yet...)
+You should run the tests by executing `python setup.py test` to verify installation went according to plan.
+
 
 Basic usage
 ===========

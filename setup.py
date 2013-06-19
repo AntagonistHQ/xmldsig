@@ -13,4 +13,5 @@ setup(name='xmldsig',
       license='BSD',
       description='Convenience wrapper for the PyXMLSec library',
       py_modules=['xmldsig'],
-      install_requires=['pyxmlsec-next', 'libxml2-python'])
+      install_requires=['pyxmlsec-next', 'libxml2-python'],
+      test_suite='tests')
