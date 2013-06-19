@@ -269,7 +269,7 @@ class XMLDSIG(object):
         
         try:
             # parse the xml
-            (doc, node) = XMLDSIG._parse_xml(body)
+            (doc, node) = XMLDSIG._parse_dsig_xml(body)
             
             # create a signing context
             dsig_ctx = self._create_dsig_ctx()
@@ -391,7 +391,7 @@ class XMLDSIG(object):
         
         try:
             # parse the xml
-            (doc, node) = XMLDSIG._parse_xml(body)
+            (doc, node) = XMLDSIG._parse_dsig_xml(body)
             
             # create a signing context
             dsig_ctx = self._create_dsig_ctx()
@@ -414,7 +414,7 @@ class XMLDSIG(object):
                 dsig_ctx.destroy()
             if doc is not None:
                 doc.freeDoc()
-
+    
     #
     # helper methods
     #
@@ -573,7 +573,7 @@ class XMLDSIG(object):
             
     
     @staticmethod
-    def _parse_xml(body):
+    def _parse_dsig_xml(body):
         """Parse the given XML body into a libxml2 object, and retrieve the
         DSigNs node. Returns the libxml2 doc and node.
         """
@@ -590,6 +590,24 @@ class XMLDSIG(object):
         
         return doc, node
     
+    @staticmethod
+    def _parse_enc_xml(body):
+        """Parse the given XML body into a libxml2 object, and retrieve the
+        EncNs node. Returns the libxml2 doc and node.
+        """
+        
+        # Reparse using libxml2
+        doc = libxml2.parseDoc(body)
+        if doc is None or doc.getRootElement() is None:
+            raise XMLDSIGError("Failed feeding xml to libxml2")
+            
+        # find the Signature node
+        node = xmlsec.findNode(doc, xmlsec.NodeEncryptedData, xmlsec.EncNs)
+        if node is None:
+            raise XMLDSIGError("Failed finding encryption root node.")
+        
+        return doc, node
+    
     def _create_dsig_ctx(self):
         """Creates a new DSig Ctx on the key manager. Remember to call .destroy
         on this object.
@@ -599,6 +617,17 @@ class XMLDSIG(object):
         if dsig_ctx is None:
             raise XMLDSIGError('Failed creating signature context.')
         return dsig_ctx
+    
+    
+    def _create_enc_ctx(self):
+        """Creates a new Enc Ctx on the key manager. Remember to call .destroy
+        on this object.
+        """
+        
+        enc_ctx = xmlsec.EncCtx(self.key_manager)
+        if enc_ctx is None:
+            raise XMLDSIGError('Failed creating encryption context.')
+        return enc_ctx
         
 def _init():
     """Initializes the libxml2 parser and XMLSEC library. Is called
@@ -612,7 +641,7 @@ def _init():
     if xmlsec.init() < 0:
         raise XMLDSIGError("Failed initializing xmlsec library")
     if xmlsec.cryptoAppInit(None) < 0:
-        raise IDealSigningError("Failed initializing crypto library")
+        raise XMLDSIGError("Failed initializing crypto library")
     if xmlsec.cryptoInit() < 0:
         raise XMLDSIGError("Failed initializing xmlsec-crypto library")
     
