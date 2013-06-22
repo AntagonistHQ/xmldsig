@@ -1,15 +1,17 @@
-XML Signatures (XMLDSig) provide digital signatures of an XML file. Support for these signatures is provided by, for instance, the [libxmlsec C library](http://www.aleksey.com/xmlsec/). A Python wrapper for this library is available as [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=home). However, this wrapper only provides access to the low-level API functions and does not achieve a Pythonic API.
+# xmldsig
 
-This xmldsig module is a convenience wrapper for pyXMLSec. It has been built initially to be used for signing and validating messages from the Dutch iDEAL payment processing system, but has been extended for general use. The module is inspired by [the code examples of pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples) and [the module made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his module lacks the ability to specify the key format, which is required to load certificates as named keys. This module mimics large parts of Lagadec's API to ensure easy transition.
+xmldsig is a convenience wrapper for pyXMLSec. XML Signatures (XMLDSig) provide digital signatures of an XML file. Support for these signatures is provided by, for instance, the [libxmlsec C library](http://www.aleksey.com/xmlsec/). A Python wrapper for this library is available as [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=home). However, this wrapper only provides access to the low-level API functions and does not achieve a Pythonic API.
 
-Installation
-============
+xmldsig has been built written to be used for signing and validating messages from the Dutch iDEAL payment processing system, but has been extended for general use. The module is inspired by [the code examples of pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples) and [the module made by Philippe Lagadec](http://www.decalage.info/python/pyxmldsig). However, his module lacks the ability to specify the key format, which is required to load certificates as named keys. This module mimics large parts of Lagadec's API to ensure easy transition.
+
+## Installation
+
 To use this library, you need to have installed two Python modules:
 
 * [python-libxml2](http://xmlsoft.org/python.html)
 * [pyXMLSec](http://pyxmlsec.labs.libre-entreprise.org/)
 
-The first requires you to install libxml2 and libxslt, the latter requires the libxmlsec library. In fact, we had to tell our OS to install libxml2-devel, libxslt-devel, xmlsec1-devel, xmlsec1-openssl-devel, and libtool-ltdl-devel.
+The first requires you to install libxml2 and libxslt, the latter requires the libxmlsec library. (To build the Python modules above, development headers may also be required: CentOS requires libxml2-devel, libxslt-devel, xmlsec1-devel, xmlsec1-openssl-devel, and libtool-ltdl-devel.)
 
 Some notes to the availability of these packages in PyPI:
 
@@ -19,11 +21,9 @@ Some notes to the availability of these packages in PyPI:
 After you have successfully downloaded and installed the required libraries, you should be able to run `python setup.py install` without any problems. Please run `python setup.py test` to verify the installation.
 
 
-Basic usage
-===========
+## Basic usage
 
-Keys
-----
+### Keys
 Generally, you would want to generate a keypair to work and test with. You can create keys and certificates yourself using OpenSSL. The example keys and certificates included have been created as follows:
 
 ```bash
@@ -33,8 +33,7 @@ openssl req -x509 -new -key test.pem -passin pass:foobar -days 3650 -out test.ce
 ```
 
 
-Signing
--------
+### Signing
 Assuming you pass the XML as a string containing the XMLDsig template, you can sign a file as follows (this example is similar to [the first example of the pyXMLSec library](http://pyxmlsec.labs.libre-entreprise.org/index.php?section=examples&id=1)):
 
 ```python
@@ -75,8 +74,7 @@ If you do not wish to provide a template yourself, you could let the module gene
 (...)
 ```
 
-Verification
-------------
+## Verification
 
 There are simple methods to verify a signature:
 
@@ -99,12 +97,10 @@ True
 
 Similarly, you can sign using the class. The key to be used can be specified by providing the correct KeyName attribute, or by providing the key name in the XML file you supply to the signer. Otherwise, the first in-memory key is used.
 
-Todo
-====
+## Todo
 * Extend functionality to include other parts of the pyXMLSec library, including encryption/decryption
 
-Changelog
-=========
+## Changelog
 * **0.2.1, 2013-06-19** Fixed issue where the crypto app was not loaded and where xmldsig.sign() would not work properly
 * **0.2, 2013-05-08** Added ability to generate templates
 * **0.1, 2013-03-17** Initial version
